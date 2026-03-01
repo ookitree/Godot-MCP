@@ -8,27 +8,27 @@ def register_object_tools(mcp: FastMCP):
     """Register all object inspection and manipulation tools with the MCP server."""
     
     @mcp.tool()
-    def get_object_properties(ctx: Context, name: str) -> Dict[str, Any]:
-        """Get all properties of a specified object (node).
-        
+    def get_object_properties(ctx: Context, name: str) -> str:
+        """Get all properties of an object.
+
         Args:
             ctx: The MCP context
             name: Name of the object to inspect
-            
+
         Returns:
-            Dict: Object containing the node's properties, components, and their values
+            str: JSON string with object properties or error details
         """
         try:
             response = get_godot_connection().send_command("GET_OBJECT_PROPERTIES", {
                 "name": name
             })
-            
+
             if "error" in response:
-                return {"error": response["error"]}
-                
-            return response
+                return f"Error: {response['error']}"
+
+            return json.dumps(response, indent=2)
         except Exception as e:
-            return {"error": f"Failed to get object properties: {str(e)}"}
+            return f"Error getting object properties: {str(e)}"
             
     @mcp.tool()
     def get_hierarchy(ctx: Context) -> str:

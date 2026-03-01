@@ -226,25 +226,3 @@ def register_scene_tools(mcp: FastMCP):
         except Exception as e:
             return f"Error setting transform: {str(e)}"
             
-    @mcp.tool()
-    def get_object_properties(ctx: Context, name: str) -> str:
-        """Get all properties of an object.
-        
-        Args:
-            ctx: The MCP context
-            name: Name of the object to inspect
-            
-        Returns:
-            str: JSON string with object properties or error details
-        """
-        try:
-            response = get_godot_connection().send_command("GET_OBJECT_PROPERTIES", {
-                "name": name
-            })
-            
-            if "error" in response:
-                return f"Error: {response['error']}"
-                
-            return json.dumps(response, indent=2)
-        except Exception as e:
-            return f"Error getting object properties: {str(e)}"
